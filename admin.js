@@ -1,28 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const form = document.getElementById("productForm");
-    const productsContainer = document.getElementById("adminProductsContainer");
-    const productCount = document.getElementById("productCount");
+    const SUPABASE_URL =
+        "https://ullbgrogaiptphgehwky.supabase.co";
+
+    const SUPABASE_KEY =
+        "YOUR_SUPABASE_KEY";
+
+    const form =
+        document.getElementById("productForm");
+
+    const productsContainer =
+        document.getElementById("adminProductsContainer");
+
+    const productCount =
+        document.getElementById("productCount");
 
     let products = [];
 
-    // -------------------------
-    // PRODUCTS
-    // -------------------------
+
+    // =========================
+    // LOAD PRODUCTS FROM SUPABASE
+    // =========================
 
     async function loadProducts() {
 
         try {
 
-            const response = await fetch("products.json");
+            const response = await fetch(
+                `${SUPABASE_URL}/rest/v1/products?select=*`,
+                {
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            `Bearer ${SUPABASE_KEY}`
+                    }
+                }
+            );
 
             if (!response.ok) {
-                throw new Error("პროდუქტების ჩატვირთვა ვერ მოხერხდა.");
+                throw new Error(
+                    "Supabase products loading failed"
+                );
             }
 
             products = await response.json();
 
-            // დროებითი მონაცემები Admin-ისთვის
             products = products.map(product => ({
                 ...product,
                 stock: product.stock ?? 10,
@@ -44,9 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // -------------------------
-    // RENDER PRODUCTS
-    // -------------------------
+    // =========================
+    // RENDER
+    // =========================
 
     function renderProducts() {
 
@@ -55,30 +77,17 @@ document.addEventListener("DOMContentLoaded", () => {
         productCount.textContent =
             `${products.length} პროდუქტი`;
 
-
-        if (products.length === 0) {
-
-            productsContainer.innerHTML = `
-                <p>
-                    ჯერ პროდუქტი არ გაქვს დამატებული.
-                </p>
-            `;
-
-            return;
-        }
-
-
         products.forEach(product => {
 
             const revenue =
-                Number(product.price) *
-                Number(product.sold);
+                Number(product.price || 0) *
+                Number(product.sold || 0);
 
+            const card =
+                document.createElement("div");
 
-            const card = document.createElement("div");
-
-            card.className = "admin-product-card";
-
+            card.className =
+                "admin-product-card";
 
             card.innerHTML = `
 
@@ -88,12 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     class="admin-product-image"
                 >
 
-
                 <div class="admin-product-info">
 
-                    <h3>
-                        ${product.name}
-                    </h3>
+                    <h3>${product.name}</h3>
 
                     <p>
                         ${product.description || ""}
@@ -111,14 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span>
                             📦 მარაგი:
                             <strong>
-                                ${product.stock}
+                                ${product.stock || 0}
                             </strong>
                         </span>
 
                         <span>
                             📈 გაყიდული:
                             <strong>
-                                ${product.sold}
+                                ${product.sold || 0}
                             </strong>
                         </span>
 
@@ -131,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     </div>
 
-
                     <div class="admin-product-actions">
 
                         <button
@@ -139,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             data-id="${product.id}">
                             ✏️ რედაქტირება
                         </button>
-
 
                         <button
                             class="admin-delete-button"
@@ -150,179 +154,111 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                 </div>
-
             `;
 
-
             productsContainer.appendChild(card);
-
         });
-
 
         addActionListeners();
     }
 
 
-    // -------------------------
-    // ADD PRODUCT
-    // -------------------------
-
-    form.addEventListener("submit", event => {
-
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById("productName").value.trim();
-
-        const price =
-            Number(
-                document.getElementById("productPrice").value
-            );
-
-        const category =
-            document.getElementById("productCategory").value.trim();
-
-        const description =
-            document.getElementById("productDescription").value.trim();
-
-        const image =
-            document.getElementById("productImage").value.trim();
-
-
-        if (!name || !price || !category || !description || !image) {
-
-            alert("გთხოვ შეავსო ყველა ველი.");
-
-            return;
-        }
-
-
-        const newProduct = {
-
-            id: Date.now(),
-
-            name: name,
-
-            price: price,
-
-            category: category,
-
-            description: description,
-
-            image: image,
-
-            stock: 10,
-
-            sold: 0
-
-        };
-
-
-        products.push(newProduct);
-
-
-        saveProductsLocally();
-
-        renderProducts();
-
-        form.reset();
-
-
-        alert("პროდუქტი წარმატებით დაემატა.");
-    });
-
-
-    // -------------------------
+    // =========================
     // EDIT / DELETE
-    // -------------------------
+    // =========================
 
     function addActionListeners() {
+
+        document
+            .querySelectorAll(".admin-edit-button")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const id =
+                            Number(button.dataset.id);
+
+                        const product =
+                            products.find(
+                                item =>
+                                    Number(item.id) === id
+                            );
+
+                        if (product) {
+                            editProduct(product);
+                        }
+
+                    }
+                );
+            });
 
 
         document
             .querySelectorAll(".admin-delete-button")
             .forEach(button => {
 
-                button.addEventListener("click", () => {
+                button.addEventListener(
+                    "click",
+                    async () => {
 
-                    const id =
-                        Number(button.dataset.id);
+                        const id =
+                            Number(button.dataset.id);
 
+                        const confirmed =
+                            confirm(
+                                "ნამდვილად გინდა ამ პროდუქტის წაშლა?"
+                            );
 
-                    const confirmed =
-                        confirm(
-                            "ნამდვილად გინდა ამ პროდუქტის წაშლა?"
-                        );
+                        if (!confirmed) {
+                            return;
+                        }
 
+                        try {
 
-                    if (!confirmed) {
-                        return;
+                            const response =
+                                await fetch(
+                                    `${SUPABASE_URL}/rest/v1/products?id=eq.${id}`,
+                                    {
+                                        method: "DELETE",
+                                        headers: {
+                                            "apikey":
+                                                SUPABASE_KEY,
+                                            "Authorization":
+                                                `Bearer ${SUPABASE_KEY}`
+                                        }
+                                    }
+                                );
+
+                            if (!response.ok) {
+                                throw new Error(
+                                    "Delete failed"
+                                );
+                            }
+
+                            await loadProducts();
+
+                        } catch (error) {
+
+                            console.error(error);
+
+                            alert(
+                                "პროდუქტის წაშლა ვერ მოხერხდა."
+                            );
+                        }
+
                     }
-
-
-                    products =
-                        products.filter(
-                            product => product.id !== id
-                        );
-
-
-                    saveProductsLocally();
-
-                    renderProducts();
-
-                });
-
+                );
             });
-
-
-        document
-            .querySelectorAll(".admin-edit-button")
-            .forEach(button => {
-
-                button.addEventListener("click", () => {
-
-                    const id =
-                        Number(button.dataset.id);
-
-
-                    const product =
-                        products.find(
-                            item => item.id === id
-                        );
-
-
-                    if (!product) {
-                        return;
-                    }
-
-
-                    editProduct(product);
-
-                });
-
-            });
-
     }
 
 
-    // -------------------------
+    // =========================
     // EDIT PRODUCT
-    // -------------------------
+    // =========================
 
-    function editProduct(product) {
-
-        const name =
-            prompt(
-                "პროდუქტის სახელი:",
-                product.name
-            );
-
-
-        if (name === null) {
-            return;
-        }
-
+    async function editProduct(product) {
 
         const price =
             prompt(
@@ -330,158 +266,88 @@ document.addEventListener("DOMContentLoaded", () => {
                 product.price
             );
 
-
         if (price === null) {
             return;
         }
 
+        const newPrice =
+            Number(price);
 
-        const category =
-            prompt(
-                "კატეგორია:",
-                product.category
-            );
+        if (
+            Number.isNaN(newPrice) ||
+            newPrice < 0
+        ) {
 
+            alert("შეიყვანე სწორი ფასი.");
 
-        if (category === null) {
             return;
         }
 
-
-        const description =
-            prompt(
-                "აღწერა:",
-                product.description
-            );
-
-
-        if (description === null) {
-            return;
-        }
-
-
-        const stock =
-            prompt(
-                "მარაგის რაოდენობა:",
-                product.stock
-            );
-
-
-        if (stock === null) {
-            return;
-        }
-
-
-        product.name = name.trim();
-
-        product.price = Number(price);
-
-        product.category = category.trim();
-
-        product.description =
-            description.trim();
-
-        product.stock =
-            Number(stock);
-
-
-        saveProductsLocally();
-
-        renderProducts();
-
-
-        alert(
-            "პროდუქტი წარმატებით განახლდა."
-        );
-
-    }
-
-
-    // -------------------------
-    // LOCAL STORAGE
-    // -------------------------
-
-    function saveProductsLocally() {
-
-        localStorage.setItem(
-            "myShopProducts",
-            JSON.stringify(products)
-        );
-
-    }
-
-
-    // -------------------------
-    // LOAD LOCAL DATA
-    // -------------------------
-
-    const savedProducts =
-        localStorage.getItem(
-            "myShopProducts"
-        );
-
-
-    if (savedProducts) {
 
         try {
 
-            products =
-                JSON.parse(savedProducts);
+            const response =
+                await fetch(
+                    `${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`,
+                    {
+                        method: "PATCH",
 
-            renderProducts();
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "apikey":
+                                SUPABASE_KEY,
+
+                            "Authorization":
+                                `Bearer ${SUPABASE_KEY}`,
+
+                            "Prefer":
+                                "return=minimal"
+                        },
+
+                        body: JSON.stringify({
+                            price: newPrice
+                        })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(errorText);
+
+                throw new Error(
+                    "Price update failed"
+                );
+            }
+
+
+            await loadProducts();
+
+            alert(
+                "ფასი წარმატებით შეიცვალა."
+            );
 
         } catch (error) {
 
             console.error(error);
 
-            loadProducts();
-
+            alert(
+                "ფასის შეცვლა ვერ მოხერხდა."
+            );
         }
-
-    } else {
-
-        loadProducts();
 
     }
 
+
+    // =========================
+    // START
+    // =========================
+
+    loadProducts();
+
 });
-const imageInput = document.getElementById("productImage");
-const imagePreview = document.getElementById("imagePreview");
-
-if (imageInput && imagePreview) {
-
-    imageInput.addEventListener("change", function () {
-
-        const file = this.files[0];
-
-        if (!file) {
-            imagePreview.innerHTML = "";
-            return;
-        }
-
-        if (!file.type.startsWith("image/")) {
-            imagePreview.innerHTML =
-                "<p>გთხოვ, აირჩიე მხოლოდ ფოტო.</p>";
-
-            this.value = "";
-            return;
-        }
-
-        const imageURL = URL.createObjectURL(file);
-
-        imagePreview.innerHTML = `
-            <img
-                src="${imageURL}"
-                alt="არჩეული ფოტო"
-                style="
-                    width: 180px;
-                    height: 180px;
-                    object-fit: cover;
-                    border-radius: 12px;
-                    display: block;
-                "
-            >
-        `;
-    });
-
-}
