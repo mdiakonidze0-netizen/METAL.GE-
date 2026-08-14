@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ჩემი მაღაზია</title>
+    <title>METAL.GE</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,15 +16,35 @@
         <div class="container header-content">
 
             <a href="index.html" class="logo">
-                ჩემი მაღაზია
+                METAL.GE
             </a>
-<nav class="navigation">
-                <a href="#products">პროდუქტები</a>
-                <a href="#about">ჩვენ შესახებ</a>
-                <a href="#contact">კონტაქტი</a>
-                <a href="admin.html">Admin</a>
+
+            <nav class="navigation">
+
+                <a href="#products" data-i18n="navProducts">
+                    პროდუქტები
+                </a>
+
+                <a href="#about" data-i18n="navAbout">
+                    ჩვენ შესახებ
+                </a>
+
+                <a href="#contact" data-i18n="navContact">
+                    კონტაქტი
+                </a>
+
+                <a href="admin.html">
+                    Admin
+                </a>
+
+                <!-- Language selector -->
+                <select id="languageSelect" class="language-select">
+                    <option value="ka">ქართული</option>
+                    <option value="en">English</option>
+                    <option value="ru">Русский</option>
+                </select>
+
             </nav>
-            
 
             <button class="menu-button" id="menuButton">
                 ☰
@@ -36,43 +56,64 @@
 
     <!-- Hero -->
     <section class="hero">
+
         <div class="container hero-content">
 
             <div class="hero-text">
-                <span class="hero-label">კეთილი იყოს თქვენი მობრძანება</span>
 
-                <h1>
+                <span
+                    class="hero-label"
+                    data-i18n="heroLabel">
+                    კეთილი იყოს თქვენი მობრძანება
+                </span>
+
+                <h1 data-i18n="heroTitle">
                     იპოვე ის, რასაც ეძებ
                 </h1>
 
-                <p>
+                <p data-i18n="heroText">
                     დაათვალიერე ჩვენი პროდუქტები და აირჩიე შენთვის სასურველი ნივთი.
                 </p>
 
-                <a href="#products" class="hero-button">
+                <a
+                    href="#products"
+                    class="hero-button"
+                    data-i18n="viewProducts">
                     პროდუქტების ნახვა
                 </a>
+
             </div>
 
         </div>
+
     </section>
 
 
     <!-- Products -->
     <main>
 
-        <section class="products-section" id="products">
+        <section
+            class="products-section"
+            id="products">
 
             <div class="container">
 
                 <div class="section-header">
-                    <span class="section-label">ჩვენი არჩევანი</span>
 
-                    <h2>პროდუქტები</h2>
+                    <span
+                        class="section-label"
+                        data-i18n="ourSelection">
+                        ჩვენი არჩევანი
+                    </span>
 
-                    <p>
+                    <h2 data-i18n="products">
+                        პროდუქტები
+                    </h2>
+
+                    <p data-i18n="productsText">
                         აირჩიე სასურველი პროდუქტი ჩვენი კატალოგიდან.
                     </p>
+
                 </div>
 
 
@@ -82,29 +123,41 @@
                     <input
                         type="search"
                         id="searchInput"
+                        data-i18n-placeholder="searchPlaceholder"
                         placeholder="მოძებნე პროდუქტი..."
                     >
 
-                    <div class="categories" id="categories">
-                        <button class="category-button active" data-category="all">
+                    <div
+                        class="categories"
+                        id="categories">
+
+                        <button
+                            class="category-button active"
+                            data-category="all"
+                            data-i18n="all">
                             ყველა
                         </button>
+
                     </div>
 
                 </div>
 
 
                 <!-- Products Container -->
-                <div class="products-grid" id="productsContainer">
-
-                    <!-- პროდუქტები ავტომატურად ჩაიტვირთება აქ -->
-
+                <div
+                    class="products-grid"
+                    id="productsContainer">
                 </div>
 
 
                 <!-- Empty Message -->
-                <div class="empty-message" id="emptyMessage">
+                <div
+                    class="empty-message"
+                    id="emptyMessage"
+                    data-i18n="emptyProducts">
+
                     პროდუქტი ვერ მოიძებნა.
+
                 </div>
 
             </div>
@@ -113,17 +166,25 @@
 
 
         <!-- About -->
-        <section class="about-section" id="about">
+        <section
+            class="about-section"
+            id="about">
 
             <div class="container">
 
                 <div class="about-content">
 
-                    <span class="section-label">ჩვენ შესახებ</span>
+                    <span
+                        class="section-label"
+                        data-i18n="aboutLabel">
+                        ჩვენ შესახებ
+                    </span>
 
-                    <h2>მარტივი და მოსახერხებელი</h2>
+                    <h2 data-i18n="aboutTitle">
+                        მარტივი და მოსახერხებელი
+                    </h2>
 
-                    <p>
+                    <p data-i18n="aboutText">
                         ჩვენი მიზანია მომხმარებელს შევთავაზოთ ხარისხიანი
                         პროდუქტები მარტივი და მოსახერხებელი გზით.
                     </p>
@@ -136,17 +197,25 @@
 
 
         <!-- Contact -->
-        <section class="contact-section" id="contact">
+        <section
+            class="contact-section"
+            id="contact">
 
             <div class="container">
 
                 <div class="section-header">
 
-                    <span class="section-label">დაგვიკავშირდი</span>
+                    <span
+                        class="section-label"
+                        data-i18n="contactLabel">
+                        დაგვიკავშირდი
+                    </span>
 
-                    <h2>კონტაქტი</h2>
+                    <h2 data-i18n="contactTitle">
+                        კონტაქტი
+                    </h2>
 
-                    <p>
+                    <p data-i18n="contactText">
                         თუ რაიმე კითხვა გაქვს, დაგვიკავშირდი.
                     </p>
 
@@ -164,11 +233,13 @@
 
         <div class="container footer-content">
 
-            <p>
-                © 2026 ჩემი მაღაზია
+            <p data-i18n="footer">
+                © 2026 METAL.GE
             </p>
 
-            <a href="#products">
+            <a
+                href="#products"
+                data-i18n="navProducts">
                 პროდუქტები
             </a>
 
