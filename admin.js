@@ -445,3 +445,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+const imageInput = document.getElementById("productImage");
+const imagePreview = document.getElementById("imagePreview");
+
+if (imageInput && imagePreview) {
+
+    imageInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) {
+            imagePreview.innerHTML = "";
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+            imagePreview.innerHTML =
+                "<p>გთხოვ, აირჩიე მხოლოდ ფოტო.</p>";
+
+            this.value = "";
+            return;
+        }
+
+        const imageURL = URL.createObjectURL(file);
+
+        imagePreview.innerHTML = `
+            <img
+                src="${imageURL}"
+                alt="არჩეული ფოტო"
+                style="
+                    width: 180px;
+                    height: 180px;
+                    object-fit: cover;
+                    border-radius: 12px;
+                    display: block;
+                "
+            >
+        `;
+    });
+
+}
