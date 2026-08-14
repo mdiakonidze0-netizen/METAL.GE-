@@ -6,63 +6,89 @@
 
     <title>Admin Login - METAL.GE</title>
 
-    <link rel="stylesheet" href="style.css">
-</head>
-   <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Admin - METAL.GE</title>
-
-    <script>
-        if (sessionStorage.getItem("metalAdmin") !== "true") {
-            window.location.href = "admin-login.html";
+    <style>
+        * {
+            box-sizing: border-box;
         }
-    </script>
 
-    <link rel="stylesheet" href="style.css">
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
 
-</head> 
-  <script>
-    if (sessionStorage.getItem("metalAdmin") !== "true") {
-        window.location.href = "admin-login.html";
-    }
-</script>  
-<script>
-document.getElementById("loginForm").addEventListener("submit", function(event) {
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px;
+            padding: 35px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+        }
 
-    event.preventDefault();
+        .login-card h1 {
+            margin-top: 0;
+            text-align: center;
+        }
 
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
+        .login-card p {
+            text-align: center;
+            color: #666;
+        }
 
-    /*
-      დროებითი შესვლა.
-      აქ რეალურ პაროლს მოგვიანებით
-      უსაფრთხო სისტემით ჩავანაცვლებთ.
-    */
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    if (username === "admin" && password === "metal123") {
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
 
-        sessionStorage.setItem("metalAdmin", "true");
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
 
-        window.location.href = "admin.html";
+        input:focus {
+            outline: none;
+            border-color: #111;
+        }
 
-    } else {
+        button {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 8px;
+            background: #111;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-        document.getElementById("loginMessage").textContent =
-            "მომხმარებელი ან პაროლი არასწორია.";
+        button:hover {
+            opacity: 0.9;
+        }
 
-    }
+        #loginMessage {
+            color: #c00;
+            margin-top: 15px;
+        }
+    </style>
+</head>
 
-});
-</script>
 <body>
 
-<main class="admin-login">
-
-    <div class="admin-login-card">
+    <div class="login-card">
 
         <h1>METAL.GE</h1>
 
@@ -79,12 +105,13 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
                 <input
                     type="text"
                     id="username"
+                    name="username"
+                    placeholder="შეიყვანე მომხმარებელი"
                     autocomplete="username"
                     required
                 >
 
             </div>
-
 
             <div class="form-group">
 
@@ -95,12 +122,13 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
                 <input
                     type="password"
                     id="password"
+                    name="password"
+                    placeholder="შეიყვანე პაროლი"
                     autocomplete="current-password"
                     required
                 >
 
             </div>
-
 
             <button type="submit">
                 შესვლა
@@ -112,7 +140,43 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
 
     </div>
 
-</main>
+    <script>
+        document
+            .getElementById("loginForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const username =
+                    document.getElementById("username").value.trim();
+
+                const password =
+                    document.getElementById("password").value;
+
+                if (
+                    username === "admin" &&
+                    password === "metal123"
+                ) {
+
+                    sessionStorage.setItem(
+                        "metalAdmin",
+                        "true"
+                    );
+
+                    window.location.href =
+                        "admin.html";
+
+                } else {
+
+                    document.getElementById(
+                        "loginMessage"
+                    ).textContent =
+                        "მომხმარებელი ან პაროლი არასწორია.";
+
+                }
+
+            });
+    </script>
 
 </body>
 </html>
