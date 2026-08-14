@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - METAL.GE</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<main class="admin-login">
+
+    <div class="admin-login-card">
+
+        <h1>METAL.GE</h1>
+
+        <p>ადმინისტრატორის შესვლა</p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="username">
+                    მომხმარებელი
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    პაროლი
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button type="submit">
+                შესვლა
+            </button>
+
+            <p id="loginMessage"></p>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>
