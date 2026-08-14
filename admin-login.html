@@ -8,6 +8,11 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
+  <script>
+    if (sessionStorage.getItem("metalAdmin") !== "true") {
+        window.location.href = "admin-login.html";
+    }
+</script>  
 <script>
 document.getElementById("loginForm").addEventListener("submit", function(event) {
 
