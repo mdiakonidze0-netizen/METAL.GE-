@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ჩემი მაღაზია</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+
+            <a href="index.html" class="logo">
+                ჩემი მაღაზია
+            </a>
+
+            <nav class="navigation">
+                <a href="#products">პროდუქტები</a>
+                <a href="#about">ჩვენ შესახებ</a>
+                <a href="#contact">კონტაქტი</a>
+            </nav>
+
+            <button class="menu-button" id="menuButton">
+                ☰
+            </button>
+
+        </div>
+    </header>
+
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-content">
+
+            <div class="hero-text">
+                <span class="hero-label">კეთილი იყოს თქვენი მობრძანება</span>
+
+                <h1>
+                    იპოვე ის, რასაც ეძებ
+                </h1>
+
+                <p>
+                    დაათვალიერე ჩვენი პროდუქტები და აირჩიე შენთვის სასურველი ნივთი.
+                </p>
+
+                <a href="#products" class="hero-button">
+                    პროდუქტების ნახვა
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Products -->
+    <main>
+
+        <section class="products-section" id="products">
+
+            <div class="container">
+
+                <div class="section-header">
+                    <span class="section-label">ჩვენი არჩევანი</span>
+
+                    <h2>პროდუქტები</h2>
+
+                    <p>
+                        აირჩიე სასურველი პროდუქტი ჩვენი კატალოგიდან.
+                    </p>
+                </div>
+
+
+                <!-- Search and Categories -->
+                <div class="filters">
+
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="მოძებნე პროდუქტი..."
+                    >
+
+                    <div class="categories" id="categories">
+                        <button class="category-button active" data-category="all">
+                            ყველა
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- Products Container -->
+                <div class="products-grid" id="productsContainer">
+
+                    <!-- პროდუქტები ავტომატურად ჩაიტვირთება აქ -->
+
+                </div>
+
+
+                <!-- Empty Message -->
+                <div class="empty-message" id="emptyMessage">
+                    პროდუქტი ვერ მოიძებნა.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- About -->
+        <section class="about-section" id="about">
+
+            <div class="container">
+
+                <div class="about-content">
+
+                    <span class="section-label">ჩვენ შესახებ</span>
+
+                    <h2>მარტივი და მოსახერხებელი</h2>
+
+                    <p>
+                        ჩვენი მიზანია მომხმარებელს შევთავაზოთ ხარისხიანი
+                        პროდუქტები მარტივი და მოსახერხებელი გზით.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Contact -->
+        <section class="contact-section" id="contact">
+
+            <div class="container">
+
+                <div class="section-header">
+
+                    <span class="section-label">დაგვიკავშირდი</span>
+
+                    <h2>კონტაქტი</h2>
+
+                    <p>
+                        თუ რაიმე კითხვა გაქვს, დაგვიკავშირდი.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <div class="container footer-content">
+
+            <p>
+                © 2026 ჩემი მაღაზია
+            </p>
+
+            <a href="#products">
+                პროდუქტები
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+</html>
