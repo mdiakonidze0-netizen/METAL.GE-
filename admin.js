@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://ullbgrogaiptphgehwky.supabase.co";
 
     const SUPABASE_KEY =
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsbGJncm9nYWlwdHBoZ2Vod2t5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzU4MzcsImV4cCI6MjEwMjMxMTgzN30.N-r40FFmV1nmUZYEuvJ8ToTEmFB0RgCK1AxsDoNvIXs
+        "აქ ჩასვი შენი anon/public key";
 
     const form =
         document.getElementById("productForm");
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // LOAD PRODUCTS FROM SUPABASE
+    // LOAD PRODUCTS
     // =========================
 
     async function loadProducts() {
@@ -39,17 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
                 throw new Error(
-                    "Supabase products loading failed"
+                    await response.text()
                 );
             }
 
             products = await response.json();
-
-            products = products.map(product => ({
-                ...product,
-                stock: product.stock ?? 10,
-                sold: product.sold ?? 0
-            }));
 
             renderProducts();
 
@@ -57,17 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.error(error);
 
-            productsContainer.innerHTML = `
-                <p>
-                    პროდუქტების ჩატვირთვა ვერ მოხერხდა.
-                </p>
-            `;
+            productsContainer.innerHTML =
+                `<p>პროდუქტების ჩატვირთვა ვერ მოხერხდა.</p>`;
         }
     }
 
 
     // =========================
-    // RENDER
+    // SHOW PRODUCTS
     // =========================
 
     function renderProducts() {
@@ -79,10 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         products.forEach(product => {
 
-            const revenue =
-                Number(product.price || 0) *
-                Number(product.sold || 0);
-
             const card =
                 document.createElement("div");
 
@@ -92,14 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
 
                 <img
-                    src="${product.image}"
-                    alt="${product.name}"
+                    src="${product.image || ""}"
+                    alt="${product.name || ""}"
                     class="admin-product-image"
                 >
 
                 <div class="admin-product-info">
 
-                    <h3>${product.name}</h3>
+                    <h3>
+                        ${product.name || ""}
+                    </h3>
 
                     <p>
                         ${product.description || ""}
@@ -110,28 +99,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span>
                             💰 ფასი:
                             <strong>
-                                ${product.price} ₾
+                                ${product.price ?? 0} ₾
                             </strong>
                         </span>
 
                         <span>
                             📦 მარაგი:
                             <strong>
-                                ${product.stock || 0}
-                            </strong>
-                        </span>
-
-                        <span>
-                            📈 გაყიდული:
-                            <strong>
-                                ${product.sold || 0}
-                            </strong>
-                        </span>
-
-                        <span>
-                            💵 შემოსავალი:
-                            <strong>
-                                ${revenue.toFixed(2)} ₾
+                                ${product.stock ?? 0}
                             </strong>
                         </span>
 
@@ -142,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <button
                             class="admin-edit-button"
                             data-id="${product.id}">
-                            ✏️ რედაქტირება
+                            ✏️ ფასის შეცვლა
                         </button>
 
                         <button
@@ -164,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // EDIT / DELETE
+    // BUTTONS
     // =========================
 
     function addActionListeners() {
@@ -187,9 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             );
 
                         if (product) {
-                            editProduct(product);
+                            editPrice(product);
                         }
-
                     }
                 );
             });
@@ -201,68 +175,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 button.addEventListener(
                     "click",
-                    async () => {
-
-                        const id =
-                            Number(button.dataset.id);
-
-                        const confirmed =
-                            confirm(
-                                "ნამდვილად გინდა ამ პროდუქტის წაშლა?"
-                            );
-
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        try {
-
-                            const response =
-                                await fetch(
-                                    `${SUPABASE_URL}/rest/v1/products?id=eq.${id}`,
-                                    {
-                                        method: "DELETE",
-                                        headers: {
-                                            "apikey":
-                                                SUPABASE_KEY,
-                                            "Authorization":
-                                                `Bearer ${SUPABASE_KEY}`
-                                        }
-                                    }
-                                );
-
-                            if (!response.ok) {
-                                throw new Error(
-                                    "Delete failed"
-                                );
-                            }
-
-                            await loadProducts();
-
-                        } catch (error) {
-
-                            console.error(error);
-
-                            alert(
-                                "პროდუქტის წაშლა ვერ მოხერხდა."
-                            );
-                        }
-
-                    }
+                    () => deleteProduct(
+                        Number(button.dataset.id)
+                    )
                 );
             });
     }
 
 
     // =========================
-    // EDIT PRODUCT
+    // CHANGE PRICE
     // =========================
 
-    async function editProduct(product) {
+    async function editPrice(product) {
 
         const price =
             prompt(
-                "ფასი:",
+                "ახალი ფასი:",
                 product.price
             );
 
@@ -315,22 +244,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
 
-                const errorText =
-                    await response.text();
-
-                console.error(errorText);
-
                 throw new Error(
-                    "Price update failed"
+                    await response.text()
                 );
             }
 
 
-            await loadProducts();
-
             alert(
                 "ფასი წარმატებით შეიცვალა."
             );
+
+            await loadProducts();
 
         } catch (error) {
 
@@ -340,7 +264,61 @@ document.addEventListener("DOMContentLoaded", () => {
                 "ფასის შეცვლა ვერ მოხერხდა."
             );
         }
+    }
 
+
+    // =========================
+    // DELETE
+    // =========================
+
+    async function deleteProduct(id) {
+
+        if (
+            !confirm(
+                "ნამდვილად გინდა პროდუქტის წაშლა?"
+            )
+        ) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${SUPABASE_URL}/rest/v1/products?id=eq.${id}`,
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            "apikey":
+                                SUPABASE_KEY,
+
+                            "Authorization":
+                                `Bearer ${SUPABASE_KEY}`
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    await response.text()
+                );
+            }
+
+
+            await loadProducts();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "პროდუქტის წაშლა ვერ მოხერხდა."
+            );
+        }
     }
 
 
