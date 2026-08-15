@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://ullbgrogaiptphgehwky.supabase.co";
 
     const SUPABASE_KEY =
-        "YOUR_SUPABASE_KEY";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsbGJncm9nYWlwdHBoZ2Vod2t5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzU4MzcsImV4cCI6MjEwMjMxMTgzN30.N-r40FFmV1nmUZYEuvJ8ToTEmFB0RgCK1AxsDoNvIXs";
 
 
     const form =
