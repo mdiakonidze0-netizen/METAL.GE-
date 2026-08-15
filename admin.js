@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const response =
                 await fetch(
-                    `${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`,
+                    `${SUPABASE_URL}/rest/v1/product?id=eq.${product.id}`,
                     {
                         method: "PATCH",
 
