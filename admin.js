@@ -265,19 +265,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                 },
 
                                 body: JSON.stringify({
-
-                                    name: name,
-
-                                    price: price,
-
-                                    category: category,
-
-                                    description:
-                                        description,
-
-                                    image: image,
-
-                                    stock: 10
+    name: name,
+    price: price,
+    Category: category,
+    description: description,
+    Image: "",
+    Stock: Number(
+        document.getElementById("productStock").value
+    )
+})
+                                
                                 })
                             }
                         );
