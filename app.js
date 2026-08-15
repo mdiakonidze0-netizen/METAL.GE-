@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://ullbgrogaiptphgehwky.supabase.co";
 
     const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsbGJncm9nYWlwdHBoZ2Vod2t5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzU4MzcsImV4cCI6MjEwMjMxMTgzN30.N-r40FFmV1nmUZYEuvJ8ToTEmFB0RgCK1AxsDoNvIXs";
+        "YOUR_SUPABASE_KEY";
 
 
     const productsContainer =
@@ -258,10 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
 
-        document.title =
-            "METAL.GE";
-
-
         if (products.length > 0) {
 
             displayProducts();
@@ -272,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // LANGUAGE SELECTOR
+    // LANGUAGE
     // =========================
 
     if (languageSelect) {
@@ -326,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // LOAD PRODUCTS FROM SUPABASE
+    // LOAD PRODUCTS
     // =========================
 
     async function loadProducts() {
@@ -346,17 +342,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            productsContainer.innerHTML = `
-                <div style="
-                    grid-column: 1 / -1;
-                    text-align: center;
-                    padding: 50px;
-                ">
-                    <p>
-                        ${translations[currentLanguage].loading}
-                    </p>
-                </div>
-            `;
+            if (productsContainer) {
+
+                productsContainer.innerHTML = `
+                    <div style="
+                        grid-column: 1 / -1;
+                        text-align: center;
+                        padding: 50px;
+                    ">
+                        <p>
+                            ${translations[currentLanguage].loading}
+                        </p>
+                    </div>
+                `;
+
+            }
 
 
             const response =
@@ -366,12 +366,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         method: "GET",
 
                         headers: {
+
                             "apikey":
                                 SUPABASE_KEY,
 
                             "Authorization":
                                 `Bearer ${SUPABASE_KEY}`
+
                         }
+
                     }
                 );
 
@@ -382,12 +385,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     await response.text();
 
                 console.error(
-                    "Supabase error:",
+                    "SUPABASE LOAD ERROR:",
                     errorText
                 );
 
                 throw new Error(
-                    "Supabase products loading failed."
+                    "Products loading failed."
                 );
 
             }
@@ -395,20 +398,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             products =
                 await response.json();
-
-
-            products =
-                products.map(product => ({
-
-                    ...product,
-
-                    stock:
-                        product.stock ?? 10,
-
-                    sold:
-                        product.sold ?? 0
-
-                }));
 
 
             createCategories();
@@ -421,17 +410,21 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(error);
 
 
-            productsContainer.innerHTML = `
-                <div style="
-                    grid-column: 1 / -1;
-                    text-align: center;
-                    padding: 50px;
-                ">
-                    <p>
-                        ${translations[currentLanguage].loadingError}
-                    </p>
-                </div>
-            `;
+            if (productsContainer) {
+
+                productsContainer.innerHTML = `
+                    <div style="
+                        grid-column: 1 / -1;
+                        text-align: center;
+                        padding: 50px;
+                    ">
+                        <p>
+                            ${translations[currentLanguage].loadingError}
+                        </p>
+                    </div>
+                `;
+
+            }
 
         }
 
@@ -439,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // CREATE CATEGORIES
+    // CATEGORIES
     // =========================
 
     function createCategories() {
@@ -456,7 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 products
                     .map(
                         product =>
-                            product.category
+                            product.Category
                     )
                     .filter(
                         category =>
@@ -581,14 +574,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 en: "Shoes",
                 ru: "Обувь"
 
-            },
-
-            "ტანსაცმელი": {
-
-                ka: "ტანსაცმელი",
-                en: "Clothing",
-                ru: "Одежда"
-
             }
 
         };
@@ -657,7 +642,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const matchesCategory =
                     selectedCategory ===
                     "all" ||
-                    product.category ===
+                    product.Category ===
                     selectedCategory;
 
 
@@ -717,7 +702,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <img
                             class="product-image"
-                            src="${product.image || ""}"
+                            src="${product.Image || ""}"
                             alt="${product.name || ""}"
                             loading="lazy"
                         >
@@ -730,7 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="product-category">
 
                             ${translateCategory(
-                                product.category || ""
+                                product.Category || ""
                             )}
 
                         </div>
