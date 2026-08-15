@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://ullbgrogaiptphgehwky.supabase.co";
 
     const SUPABASE_KEY =
-        "YOUR_SUPABASE_KEY";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsbGJncm9nYWlwdHBoZ2Vod2t5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzU4MzcsImV4cCI6MjEwMjMxMTgzN30.N-r40FFmV1nmUZYEuvJ8ToTEmFB0RgCK1AxsDoNvIXs";
 
 
     const productsContainer =
@@ -361,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const response =
                 await fetch(
-                    `${SUPABASE_URL}/rest/v1/products?select=*`,
+                    `${SUPABASE_URL}/rest/v1/Produqt?select=*`,
                     {
                         method: "GET",
 
@@ -381,7 +381,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const errorText =
                     await response.text();
 
-                console.error(errorText);
+                console.error(
+                    "Supabase error:",
+                    errorText
+                );
 
                 throw new Error(
                     "Supabase products loading failed."
@@ -593,14 +596,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (
             categories[category] &&
-            categories[category][
-                currentLanguage
-            ]
+            categories[category][currentLanguage]
         ) {
 
-            return categories[category][
-                currentLanguage
-            ];
+            return categories[category][currentLanguage];
 
         }
 
@@ -658,7 +657,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const matchesCategory =
                     selectedCategory ===
                     "all" ||
-
                     product.category ===
                     selectedCategory;
 
@@ -756,7 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             <span class="product-price">
 
-                                ${product.price} ₾
+                                ${product.price ?? 0} ₾
 
                             </span>
 
@@ -825,7 +823,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                 `${translations[currentLanguage].price}: ` +
 
-                                `${product.price} ₾\n\n` +
+                                `${product.price ?? 0} ₾\n\n` +
 
                                 `${product.description || ""}`
 
